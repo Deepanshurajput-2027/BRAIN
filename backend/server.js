@@ -2,29 +2,31 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./src/config/db.js";
-// ... import your routes here ...
+import userRouter from "./src/routes/user.routes.js"; // Ensure this path is correct
 
 dotenv.config();
+
 const app = express();
-const PORT = process.env.PORT || 8000;
 
-// 1. Middlewares
-app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
+// 1. MIDDLEWARES (Must come before routes)
 app.use(express.json());
+app.use(cors({
+    origin: "https://brain-second.vercel.app", // Hardcoded for now to fix the error immediately
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+}));
 
-// 2. Routes (Add your actual routes here)
-app.get("/health", (req, res) => res.json({ status: "ok" }));
+// 2. MOUNT ROUTES
+// This ensures that when frontend calls /api/v1/users/login, it works!
+app.use("/api/v1/users", userRouter);
 
-// 3. Database & Server Logic
-connectDB()
-  .then(() => {
-    // This part only runs locally. Vercel ignores app.listen()
-    if (process.env.NODE_ENV !== "production") {
-      app.listen(PORT, () => console.log(`🚀 Server on port ${PORT}`));
-    }
-  })
-  .catch((err) => console.error("DB Error:", err));
+// 3. HEALTH CHECK (To test if backend is live)
+app.get("/", (req, res) => {
+    res.json({ message: "Backend is running! 🚀" });
+});
 
-// 4. CRITICAL: The Export
-// Vercel needs this to handle the routing
+// 4. DATABASE CONNECTION
+connectDB().catch(err => console.error("MongoDB connection error:", err));
+
+// 5. EXPORT FOR VERCEL (Most Important)
 export default app;
