@@ -24,13 +24,6 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       select: false,
     },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
-    verificationToken: String,
-    resetPasswordToken: String,
-    resetPasswordExpiry: Date,
   },
   { timestamps: true }
 );
