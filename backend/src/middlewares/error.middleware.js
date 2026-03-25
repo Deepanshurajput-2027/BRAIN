@@ -1,5 +1,4 @@
 import { ApiError } from "../utils/ApiError.js";
-import logger from "../utils/logger.js";
 
 // eslint-disable-next-line no-unused-vars
 export const errorMiddleware = (err, req, res, next) => {
@@ -20,19 +19,10 @@ export const errorMiddleware = (err, req, res, next) => {
     ...(process.env.NODE_ENV === "development" && { stack: error.stack }),
   };
 
-  // Log the error
-  if (error.statusCode >= 500) {
-    logger.error(`[API ERROR] ${req.method} ${req.url} - ${error.message}`, {
-      statusCode: error.statusCode,
-      stack: error.stack,
-      body: req.body,
-      params: req.params,
-    });
-  } else {
-    logger.warn(`[CLIENT ERROR] ${req.method} ${req.url} - ${error.message}`, {
-      statusCode: error.statusCode,
-      body: req.body,
-    });
+  // Log to console in development
+  if (process.env.NODE_ENV === "development") {
+    console.error(`[ERROR] ${req.method} ${req.url}:`, error.message);
+    if (error.stack) console.error(error.stack);
   }
 
   return res.status(error.statusCode).json(response);
