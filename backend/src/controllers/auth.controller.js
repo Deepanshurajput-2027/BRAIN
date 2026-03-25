@@ -5,10 +5,13 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { generateAuthToken } from "../services/auth.service.js";
 
 // ── Shared cookie options ─────────────────────────────────────────────────────
+// ✅ FIXED CODE FOR VERCEL
 const cookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  secure: true,      // Always true for Vercel (it uses HTTPS)
+  sameSite: "none",  // REQUIRED for cross-site/monorepo setup
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
 };
 
 // ── Register ──────────────────────────────────────────────────────────────────
