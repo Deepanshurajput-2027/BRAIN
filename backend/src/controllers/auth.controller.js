@@ -35,10 +35,11 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const token = await generateAuthToken(createdUser._id);
 
-  return res
-    .status(201)
-    .cookie("token", token, cookieOptions)
-    .json(new ApiResponse(201, { user: createdUser }, "User registered successfully"));
+  // registerUser — same change
+return res
+  .status(201)
+  .cookie("token", token, cookieOptions)
+  .json(new ApiResponse(201, { user: createdUser, token }, "User registered successfully")); // ✅ add token
 });
 
 // ── Login ─────────────────────────────────────────────────────────────────────
@@ -66,10 +67,11 @@ const loginUser = asyncHandler(async (req, res) => {
   const token = await generateAuthToken(user._id);
   const loggedInUser = await User.findById(user._id).select("-password");
 
-  return res
-    .status(200)
-    .cookie("token", token, cookieOptions)
-    .json(new ApiResponse(200, { user: loggedInUser }, "Logged in successfully"));
+  // loginUser — return token in body too
+return res
+  .status(200)
+  .cookie("token", token, cookieOptions)
+  .json(new ApiResponse(200, { user: loggedInUser, token }, "Logged in successfully")); // ✅ add token
 });
 
 // ── Current User ─────────────────────────────────────────────────────────────
