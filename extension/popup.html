@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRAIN Capture</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { width: 350px; min-height: 400px; }
+    .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans selection:bg-indigo-100">
+  <div class="p-6">
+    <!-- Header -->
+    <div class="flex items-center gap-3 mb-8">
+      <div class="p-2 bg-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-100">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.54Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.54Z"/></svg>
+      </div>
+      <div>
+        <h1 class="text-xl font-black tracking-tight">BRAIN</h1>
+        <p class="text-[10px] uppercase font-bold text-gray-400 tracking-widest">Instant Capture</p>
+      </div>
+    </div>
+
+    <!-- Page Info -->
+    <div id="page-info" class="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
+      <p id="page-title" class="text-xs font-bold text-gray-900 mb-1 line-clamp-2">Loading page...</p>
+      <p id="page-url" class="text-[10px] text-gray-400 truncate"></p>
+    </div>
+
+    <!-- Actions -->
+    <div class="space-y-4">
+      <button id="save-btn" class="w-full flex items-center justify-center gap-2 py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 group active:scale-95 disabled:opacity-70">
+        <svg id="save-icon" class="group-hover:translate-y-[-2px] transition-transform" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        <span>Save to Brain</span>
+      </button>
+
+      <!-- Status -->
+      <div id="status-container" class="hidden">
+        <div id="loading-state" class="flex flex-col items-center gap-3 py-4">
+          <div class="w-8 h-8 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin"></div>
+          <p class="text-[11px] font-bold text-gray-500 uppercase tracking-widest animate-pulse">Gemini is vectorizing...</p>
+        </div>
+        
+        <div id="success-state" class="hidden flex flex-col items-center gap-3 py-4 text-emerald-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          <p class="text-[11px] font-bold uppercase tracking-widest">Knowledge Synced</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-8 pt-6 border-t border-gray-100 flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+      <span>v1.0 (PRO)</span>
+      <a href="http://localhost:5173" target="_blank" class="text-indigo-600 hover:underline">Open Knowledge Hub</a>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
