@@ -29,6 +29,7 @@ You need "Production" versions of your keys. Here is how to get them:
 *   Click **Connect** -> **Drivers** -> Copy the connection string.
 *   It will look like: `mongodb+srv://user:password@cluster.mongodb.net/BRAIN?retryWrites=true&w=majority`
 *   **Important**: Replace `password` with the database user password you created.
+*   **Networking (CRITICAL)**: Go to **Network Access** in MongoDB Atlas. Click **"Add IP Address"** and choose **"Allow Access from Anywhere"** (`0.0.0.0/0`). Vercel needs this to connect.
 
 ### 2. AI Brain (Gemini API)
 *   Go to [Google AI Studio](https://aistudio.google.com/app/apikey).
