@@ -72,6 +72,15 @@ app.use(express.static("public"));
 // ── Cookie Parser ─────────────────────────────────────────────────────────────
 app.use(cookieParser());
 
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// ── Shared cookie options ─────────────────────────────────────────────────────
+// (Moved up for accessibility if needed, but keeping it simple for now)
+
 // ── Routes ────────────────────────────────────────────────────────────────────
 import userRoutes from "./routes/user.routes.js";
 import contentRoutes from "./routes/content.routes.js";
@@ -83,6 +92,11 @@ app.use("/api/v1/collections", collectionRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok", message: "Server is up and running 🚀" });
+});
+
+// ── Serve Frontend for all other routes (SPA Support) ─────────────────────────
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
 // ── Global Error Middleware (MUST be last) ────────────────────────────────────

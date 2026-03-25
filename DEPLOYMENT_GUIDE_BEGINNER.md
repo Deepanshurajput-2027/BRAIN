@@ -47,22 +47,37 @@ You need "Production" versions of your keys. Here is how to get them:
 
 ---
 
-## Step 3: Deploy to Vercel
+## Step 3: Deploy to Vercel (The Easy Way)
+
+We are going to use a **"Unified Deployment"**. This means we merge the Frontend into the Backend so you only have **one** link and **zero** CORS issues.
+
+### 1. Merge the Frontend
+You can do this automatically or manually:
+
+**Option A: Automate it (Recommended)**
+Run this in your terminal:
+```powershell
+./build-prod.ps1
+```
+
+**Option B: Manual way (Copy & Paste)**
+1.  Go into your **`frontend`** folder and run `npm run build`.
+2.  You will see a new **`dist`** folder appear. Copy everything inside it.
+3.  Go to your **`backend`** folder. Create a folder named **`public`** (if it doesn't exist).
+4.  Paste everything you copied into the **`backend/public`** folder.
+
+### 2. Deploy the Backend Folder
 1.  Go to [vercel.com](https://vercel.com) and sign in with GitHub.
-2.  Click **"Add New"** -> **"Project"**.
-3.  Import your `BRAIN` repository.
-4.  **The Most Important Part**: Click the **Environment Variables** dropdown.
-5.  Add **ALL** the variables from your `.env.example` file.
-    *   *Example*: Name: `MONGO_URI`, Value: `(Your Atlas Link)`
-6.  Click **Deploy**.
+2.  Click **"Add New"** -> **"Project"** -> Import your `BRAIN` repo.
+3.  **Root Directory**: Set this to **`backend`**.
+4.  **Environment Variables**: Add everything from `backend/.env.example`.
+    *   *Note: You DO NOT need `CORS_ORIGIN` or `FRONTEND_URL` anymore!*
+5.  Click **Deploy**.
 
 ---
 
-## Step 4: Final Link-Up
-Once Vercel gives you a URL (e.g., `https://my-brain.vercel.app`):
-1.  Add that URL to your Vercel Environment Variables as `FRONTEND_URL` and `CORS_ORIGIN`.
-2.  Update `VITE_API_URL` to point to your backend (e.g., `https://my-brain.vercel.app/api/v1`).
-3.  **Redeploy** one last time.
+## Step 4: Done! 🎉
+That's it! Your site will now be live at the URL Vercel gives you. Because we merged them, you don't have to worry about complex "handshakes" between URLs.
 
 ---
 
