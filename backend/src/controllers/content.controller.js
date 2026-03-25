@@ -107,33 +107,51 @@ export const searchContent = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Search query is required");
   }
 
-  // Generate embedding for the query
-  const queryVector = await generateEmbedding(q);
-  console.log(`[AUDIT] Search Content - Query Vector Length: ${queryVector.length}`);
+  try {
+    // 1. Generate embedding for the query
+    const queryVector = await generateEmbedding(q);
+    console.log(`[AUDIT] Search Content - Query Vector Length: ${queryVector.length}`);
 
-  // MongoDB Vector Search Pipeline
-  const results = await Content.aggregate([
-    {
-      $vectorSearch: {
-        index: "vector_index",
-        path: "vector",
-        queryVector: queryVector,
-        numCandidates: 100,
-        limit: 10,
-        filter: { owner: userId }
+    // 2. MongoDB Vector Search Pipeline
+    const results = await Content.aggregate([
+      {
+        $vectorSearch: {
+          index: "vector_index",
+          path: "vector",
+          queryVector: queryVector,
+          numCandidates: 100,
+          limit: 10,
+          filter: { owner: userId }
+        }
+      },
+      {
+        $project: {
+          vector: 0,
+          score: { $meta: "vectorSearchScore" }
+        }
       }
-    },
-    {
-      $project: {
-        vector: 0,
-        score: { $meta: "vectorSearchScore" }
-      }
-    }
-  ]);
+    ]);
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, results, "Search results fetched successfully"));
+    return res
+      .status(200)
+      .json(new ApiResponse(200, results, "Semantic search results fetched successfully"));
+  } catch (error) {
+    console.warn("[SEARCH] Semantic search failed, falling back to keyword search:", error.message);
+    
+    // Fallback: Simple text search using regex on title and description
+    const results = await Content.find({
+      owner: userId,
+      $or: [
+        { title: { $regex: q, $options: "i" } },
+        { description: { $regex: q, $options: "i" } },
+        { tags: { $in: [new RegExp(q, "i")] } }
+      ]
+    }).limit(20).select("-vector");
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, results, "Keyword search results fetched (fallback)"));
+  }
 });
 
 // ── Get Related Content ───────────────────────────────────────────────────────
