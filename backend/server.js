@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./src/config/db.js";
 import userRouter from "./src/routes/user.routes.js"; // Ensure this path is correct
 import contentRouter from "./src/routes/content.routes.js";
+import collectionRouter from "./src/routes/collection.routes.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(cors({
 // This ensures that when frontend calls /api/v1/users/login, it works!
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/content", contentRouter);
+app.use("/api/v1/collections", collectionRouter);
 
 // 4. DATABASE CONNECTION
 connectDB().catch(err => console.error("MongoDB connection error:", err));
