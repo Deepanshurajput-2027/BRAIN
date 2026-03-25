@@ -22,21 +22,20 @@ const logger = winston.createLogger({
   format: logFormat,
   defaultMeta: { service: "brain-backend" },
   transports: [
-    dailyRotateTransport,
-    new winston.transports.File({ filename: "logs/error.log", level: "error" }),
-    new winston.transports.File({ filename: "logs/combined.log" }),
-  ],
-});
-
-if (process.env.NODE_ENV !== "production") {
-  logger.add(
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
         winston.format.simple()
       ),
     })
-  );
+  ],
+});
+
+// Add file logging only in non-production/non-Vercel environments
+if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+  logger.add(dailyRotateTransport);
+  logger.add(new winston.transports.File({ filename: "logs/error.log", level: "error" }));
+  logger.add(new winston.transports.File({ filename: "logs/combined.log" }));
 }
 
 export default logger;
