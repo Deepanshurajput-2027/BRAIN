@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import { errorMiddleware } from "./middlewares/error.middleware.js";
+import { errorMiddleware } from "../src/middlewares/error.middleware.js";
 
 const app = express();
 
@@ -49,9 +49,9 @@ const __dirname = path.dirname(__filename);
 // (Moved up for accessibility if needed, but keeping it simple for now)
 
 // ── Routes ────────────────────────────────────────────────────────────────────
-import userRoutes from "./routes/user.routes.js";
-import contentRoutes from "./routes/content.routes.js";
-import collectionRoutes from "./routes/collection.routes.js";
+import userRoutes from "../src/routes/user.routes.js";
+import contentRoutes from "../src/routes/content.routes.js";
+import collectionRoutes from "../src/routes/collection.routes.js";
 
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/content", contentRoutes);
