@@ -19,20 +19,27 @@ const limiter = rateLimit({
 
 const authLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5, // Limit each IP to 5 requests per windowMs (login/register/forgot-password)
+  max: 20, // Relaxed for dev: limit each IP to 20 requests per hour
   message: "Too many authentication attempts, please try again after an hour",
   standardHeaders: true,
   legacyHeaders: false,
 });
 
 // ── Security & Logging ──────────────────────────────────────────────────────
-app.use(limiter);
-app.use("/api/v1/users", authLimiter);
+app.use(
+  cors({
+    origin: [process.env.CORS_ORIGIN, "http://localhost:5173", "http://localhost:5174"].filter(Boolean),
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+    optionsSuccessStatus: 200
+  })
+);
 
 // ── Security Headers (HSTS, etc.) ──────────────────────────────────────────
 app.use(
   helmet({
-    contentSecurityPolicy: process.env.NODE_ENV === "production" ? undefined : false,
+    contentSecurityPolicy: false, // Disabled for local dev compatibility
     hsts: {
       maxAge: 31536000,
       includeSubDomains: true,
@@ -50,15 +57,9 @@ if (process.env.NODE_ENV === "production") {
     next();
   });
 }
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
-    optionsSuccessStatus: 200
-  })
-);
+
+app.use(limiter);
+app.use("/api/v1/users", authLimiter);
 app.use(morgan("dev"));
 
 // ── Body Parsers ─────────────────────────────────────────────────────────────
