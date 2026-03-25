@@ -66,13 +66,13 @@ Run this in your terminal:
 3.  Go to your **`backend`** folder. Create a folder named **`public`** (if it doesn't exist).
 4.  Paste everything you copied into the **`backend/public`** folder.
 
-### 2. Deploy the Backend Folder
-1.  Go to [vercel.com](https://vercel.com) and sign in with GitHub.
-2.  Click **"Add New"** -> **"Project"** -> Import your `BRAIN` repo.
-3.  **Root Directory**: Set this to **`backend`**.
-4.  **Environment Variables**: Add everything from `backend/.env.example`.
-    *   *Note: You DO NOT need `CORS_ORIGIN` or `FRONTEND_URL` anymore!*
-5.  Click **Deploy**.
+### 2. Vercel Settings (CRITICAL)
+When you add the project to Vercel, make sure these are set:
+1.  **Root Directory**: Set this to **`backend`**.
+2.  **Framework Preset**: Change this to **`Other`** (Do NOT use Vite).
+3.  **Build Command**: Leave it **Empty** (Vercel will run your `server.js` automatically).
+4.  **Output Directory**: Leave it **Empty**.
+5.  **Rewrites**: I have already added a `vercel.json` file that handles this for you.
 
 ---
 
