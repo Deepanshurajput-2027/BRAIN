@@ -9,14 +9,6 @@ const logFormat = winston.format.combine(
   winston.format.json()
 );
 
-const dailyRotateTransport = new winston.transports.DailyRotateFile({
-  filename: "logs/application-%DATE%.log",
-  datePattern: "YYYY-MM-DD",
-  zippedArchive: true,
-  maxSize: "20m",
-  maxFiles: "14d",
-});
-
 const logger = winston.createLogger({
   level: process.env.NODE_ENV === "development" ? "debug" : "info",
   format: logFormat,
@@ -27,12 +19,20 @@ const logger = winston.createLogger({
         winston.format.colorize(),
         winston.format.simple()
       ),
-    })
+    }),
   ],
 });
 
-// Add file logging only in non-production/non-Vercel environments
+// ✅ Move instantiation INSIDE the check so mkdir is never called on Vercel
 if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+  const dailyRotateTransport = new winston.transports.DailyRotateFile({
+    filename: "logs/application-%DATE%.log",
+    datePattern: "YYYY-MM-DD",
+    zippedArchive: true,
+    maxSize: "20m",
+    maxFiles: "14d",
+  });
+
   logger.add(dailyRotateTransport);
   logger.add(new winston.transports.File({ filename: "logs/error.log", level: "error" }));
   logger.add(new winston.transports.File({ filename: "logs/combined.log" }));
