@@ -52,6 +52,17 @@ export const removeContentFromCollection = async (collectionId, contentId) => {
 };
 
 /**
+ * updateCollection
+ * @param {string} id 
+ * @param {Object} data - { title, description }
+ * @returns {Promise}
+ */
+export const updateCollection = async (id, data) => {
+  const response = await axiosInstance.patch(`/collections/${id}`, data);
+  return response.data.data;
+};
+
+/**
  * fetchCollectionDetails
  * @param {string} id 
  * @returns {Promise}

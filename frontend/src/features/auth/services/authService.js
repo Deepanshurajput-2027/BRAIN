@@ -2,23 +2,30 @@ import axiosInstance from '../../../shared/api/axiosInstance';
 
 export const login = async (credentials) => {
   const response = await axiosInstance.post('/users/login', credentials);
-  return response.data.data;
+  const { user, token } = response.data.data;
+  if (token) localStorage.setItem('token', token); // ✅ save token
+  return user;
 };
 
 export const register = async (userData) => {
   const response = await axiosInstance.post('/users/register', userData);
-  return response.data.data;
+  const { user, token } = response.data.data;
+  if (token) localStorage.setItem('token', token); // ✅ save token
+  return { user };
 };
 
 export const logout = async () => {
+  localStorage.removeItem('token'); // ✅ clear token
   const response = await axiosInstance.post('/users/logout');
   return response.data.data;
 };
 
+// rest stays the same...
 export const getCurrentUser = async () => {
   const response = await axiosInstance.get('/users/me');
   return response.data.data;
 };
+
 export const updateProfile = async (userData) => {
   const response = await axiosInstance.patch('/users/update-profile', userData);
   return response.data.data;

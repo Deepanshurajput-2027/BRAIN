@@ -5,12 +5,18 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Response interceptor for handle errors
+// ✅ Attach token from localStorage to every request
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+});
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // We let the frontend state management (Redux/App.jsx) handle 401s 
-    // to avoid hard-reload infinite loops.
     return Promise.reject(error);
   }
 );

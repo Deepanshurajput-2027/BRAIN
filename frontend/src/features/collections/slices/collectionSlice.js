@@ -23,6 +23,17 @@ export const saveNewCollection = createAsyncThunk(
   }
 );
 
+export const updateCollection = createAsyncThunk(
+  'collections/update',
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      return await collectionService.updateCollection(id, data);
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to update collection');
+    }
+  }
+);
+
 export const removeCollection = createAsyncThunk(
   'collections/delete',
   async (id, { rejectWithValue }) => {
@@ -72,6 +83,12 @@ const collectionSlice = createSlice({
       })
       .addCase(saveNewCollection.fulfilled, (state, action) => {
         state.items.unshift(action.payload);
+      })
+      .addCase(updateCollection.fulfilled, (state, action) => {
+        const index = state.items.findIndex(item => item._id === action.payload._id);
+        if (index !== -1) {
+          state.items[index] = action.payload;
+        }
       })
       .addCase(removeCollection.fulfilled, (state, action) => {
         state.items = state.items.filter(item => item._id !== action.payload);

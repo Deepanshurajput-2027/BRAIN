@@ -5,10 +5,13 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { generateAuthToken } from "../services/auth.service.js";
 
 // ── Shared cookie options ─────────────────────────────────────────────────────
+// ✅ FIXED CODE FOR VERCEL
 const cookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  secure: true,      // Always true for Vercel (it uses HTTPS)
+  sameSite: "none",  // REQUIRED for cross-site/monorepo setup
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
 };
 
 // ── Register ──────────────────────────────────────────────────────────────────
@@ -32,10 +35,11 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const token = await generateAuthToken(createdUser._id);
 
-  return res
-    .status(201)
-    .cookie("token", token, cookieOptions)
-    .json(new ApiResponse(201, { user: createdUser }, "User registered successfully"));
+  // registerUser — same change
+return res
+  .status(201)
+  .cookie("token", token, cookieOptions)
+  .json(new ApiResponse(201, { user: createdUser, token }, "User registered successfully")); // ✅ add token
 });
 
 // ── Login ─────────────────────────────────────────────────────────────────────
@@ -63,10 +67,11 @@ const loginUser = asyncHandler(async (req, res) => {
   const token = await generateAuthToken(user._id);
   const loggedInUser = await User.findById(user._id).select("-password");
 
-  return res
-    .status(200)
-    .cookie("token", token, cookieOptions)
-    .json(new ApiResponse(200, { user: loggedInUser }, "Logged in successfully"));
+  // loginUser — return token in body too
+return res
+  .status(200)
+  .cookie("token", token, cookieOptions)
+  .json(new ApiResponse(200, { user: loggedInUser, token }, "Logged in successfully")); // ✅ add token
 });
 
 // ── Current User ─────────────────────────────────────────────────────────────
