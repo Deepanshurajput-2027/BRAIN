@@ -27,7 +27,7 @@ const Layout = () => {
           <span className="text-2xl font-black text-[var(--text-primary)] tracking-tight">BRAIN</span>
         </div>
 
-        <nav className="flex-1 px-4 space-y-6 mt-2 overflow-y-auto custom-scrollbar">
+        <nav className="flex-1 px-4 space-y-6 mt-2 overflow-y-auto no-scrollbar">
           <div className="space-y-2">
             <h3 className="text-[9px] font-black text-[#9090CC] uppercase tracking-[0.25em] px-3 mb-4 opacity-40">Discovery</h3>
             <NavLink icon={<LayoutDashboard size={22} />} label="Dashboard" href="/" />
@@ -81,7 +81,7 @@ const Layout = () => {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto relative bg-[var(--bg-primary)] h-screen scroll-smooth">
+      <main className="flex-1 overflow-y-auto relative bg-[var(--bg-primary)] h-screen scroll-smooth no-scrollbar">
         <header className="h-24 bg-[var(--bg-secondary)]/50 backdrop-blur-2xl border-b border-white/5 sticky top-0 z-10 px-10 flex items-center justify-between">
           <div className="flex-1 max-w-2xl">
             <IntelligentHeader 
