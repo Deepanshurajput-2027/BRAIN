@@ -28,7 +28,7 @@ const App = () => {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center space-y-6">
+      <div className="min-h-screen bg-[#0D0F1A] flex flex-col items-center justify-center space-y-6">
         <div className="relative">
           <div className="w-20 h-20 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-2xl shadow-indigo-200 animate-pulse">
             <Brain size={40} />
@@ -38,7 +38,7 @@ const App = () => {
           </div>
         </div>
         <div className="flex flex-col items-center space-y-2">
-          <h2 className="text-2xl font-black text-gray-900 tracking-tighter">BRAIN</h2>
+          <h2 className="text-2xl font-black text-white tracking-tighter">BRAIN</h2>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Synchronizing Neurons...</p>
         </div>
       </div>
@@ -51,7 +51,7 @@ const App = () => {
         {/* Public Routes */}
         <Route path="/login" element={
           !isAuthenticated ? (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-[#0D0F1A] flex items-center justify-center p-4">
               <LoginForm />
             </div>
           ) : (
@@ -60,7 +60,7 @@ const App = () => {
         } />
         <Route path="/register" element={
           !isAuthenticated ? (
-            <div className="min-h-screen bg-[#030014] flex items-center justify-center p-4">
+            <div className="min-h-screen bg-[#0D0F1A] flex items-center justify-center p-4">
               <RegisterForm />
             </div>
           ) : (
@@ -68,17 +68,17 @@ const App = () => {
           )
         } />
         <Route path="/forgot-password" element={
-          <div className="min-h-screen bg-[#030014] flex items-center justify-center p-4">
+          <div className="min-h-screen bg-[#0D0F1A] flex items-center justify-center p-4">
             <ForgotPassword />
           </div>
         } />
         <Route path="/reset-password/:token" element={
-          <div className="min-h-screen bg-[#030014] flex items-center justify-center p-4">
+          <div className="min-h-screen bg-[#0D0F1A] flex items-center justify-center p-4">
             <ResetPassword />
           </div>
         } />
         <Route path="/verify-email/:token" element={
-          <div className="min-h-screen bg-[#030014] flex items-center justify-center p-4">
+          <div className="min-h-screen bg-[#0D0F1A] flex items-center justify-center p-4">
             <VerifyEmail />
           </div>
         } />

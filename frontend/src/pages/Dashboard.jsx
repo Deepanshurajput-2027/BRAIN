@@ -41,25 +41,28 @@ const Dashboard = () => {
   if (!items || items.length === 0) {
     return (
       <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="flex flex-col items-center justify-center py-24 px-4 text-center bg-[var(--bg-secondary)] rounded-3xl border border-[var(--border-subtle)] shadow-sm"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col items-center justify-center py-32 px-6 text-center bg-[#1C1E35] rounded-[3rem] border border-white/5 shadow-2xl relative overflow-hidden group"
       >
-        <div className="p-6 bg-indigo-500/10 rounded-full text-indigo-400 mb-6">
-          <Inbox size={48} />
+        <div className="absolute inset-0 bg-indigo-600/[0.02] -translate-y-full group-hover:translate-y-0 transition-transform duration-1000" />
+        
+        <div className="relative z-10">
+          <div className="w-24 h-24 bg-white/5 rounded-[2rem] flex items-center justify-center text-[#6C63FF] mb-8 mx-auto shadow-2xl shadow-indigo-500/10 group-hover:scale-110 transition-transform duration-500">
+            <Inbox size={40} strokeWidth={1.5} />
+          </div>
+          <h2 className="text-4xl font-black text-white mb-4 tracking-tighter">Your Digital Void</h2>
+          <p className="text-[#9090CC] max-w-md mx-auto mb-12 leading-relaxed font-bold text-lg opacity-60">
+            Every great discovery starts with a single spark. Begin layering your second brain by capturing your first piece of knowledge.
+          </p>
+          <button 
+            onClick={onOpenAddModal}
+            className="group/btn bg-[#6C63FF] text-white px-10 py-5 rounded-2xl font-black hover:bg-[#5A52E8] transition-all shadow-2xl shadow-indigo-500/20 flex items-center gap-3 mx-auto active:scale-95"
+          >
+            <Plus size={24} className="group-hover/btn:rotate-90 transition-transform duration-300" />
+            Initialize Brain
+          </button>
         </div>
-        <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-3">Your Knowledge Hub is Empty</h2>
-        <p className="text-[var(--text-secondary)] max-w-md mx-auto mb-10 leading-relaxed text-lg">
-          Start building your second brain by adding your first link, article, or video. 
-          We'll handle the summarization and semantic mapping.
-        </p>
-        <button 
-          onClick={onOpenAddModal}
-          className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-600/20 flex items-center gap-3 active:scale-95"
-        >
-          <Plus size={24} />
-          Add First Link
-        </button>
       </motion.div>
     );
   }
@@ -69,25 +72,32 @@ const Dashboard = () => {
       {/* Stats Section */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard 
-          icon={<Library className="text-indigo-600" size={20} />} 
+          icon={<Library />} 
           label="Total Items" 
           value={stats.totalContent} 
-          trend="+12% this week"
+          trend="12%"
+          trendType="up"
         />
         <StatCard 
-          icon={<Layers className="text-purple-600" size={20} />} 
+          icon={<Layers />} 
           label="Collections" 
           value={stats.totalCollections} 
+          trend="5%"
+          trendType="up"
         />
         <StatCard 
-          icon={<Zap className="text-amber-600" size={20} />} 
+          icon={<Zap />} 
           label="Highlights" 
           value={stats.totalHighlights} 
+          trend="2%"
+          trendType="down"
         />
         <StatCard 
-          icon={<Search className="text-emerald-600" size={20} />} 
+          icon={<Search />} 
           label="AI Searches" 
           value={stats.totalSearches} 
+          trend="24%"
+          trendType="up"
         />
       </section>
 
@@ -142,19 +152,26 @@ const Dashboard = () => {
   );
 };
 
-const StatCard = ({ icon, label, value, trend }) => (
+const StatCard = ({ icon, label, value, trend, trendType = 'up' }) => (
   <motion.div 
     whileHover={{ y: -4 }}
-    className="bg-[var(--bg-secondary)] p-5 rounded-3xl border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all group"
+    className="bg-[var(--bg-secondary)] p-5 rounded-3xl border border-white/5 shadow-sm hover:shadow-xl hover:bg-white/[0.02] transition-all group relative overflow-hidden"
   >
-    <div className="flex items-center justify-between mb-4">
-      <div className="p-2.5 bg-white/5 rounded-xl group-hover:bg-indigo-500/10 transition-colors">
-        {icon}
+    <div className="absolute top-0 right-0 w-24 h-24 bg-[#6C63FF]/5 blur-3xl -mr-12 -mt-12 group-hover:bg-[#6C63FF]/10 transition-colors" />
+    
+    <div className="flex items-center justify-between mb-4 relative z-10">
+      <div className="p-2.5 bg-white/5 rounded-xl group-hover:bg-[#6C63FF]/20 transition-colors text-white">
+        {React.cloneElement(icon, { size: 20 })}
       </div>
-      {trend && <span className="text-[10px] font-bold text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded-full">{trend}</span>}
+      {trend && (
+        <span className={`text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider flex items-center gap-1
+          ${trendType === 'up' ? 'text-emerald-400 bg-emerald-400/10' : 'text-amber-400 bg-amber-400/10'}`}>
+          {trendType === 'up' ? '↑' : '↓'} {trend}
+        </span>
+      )}
     </div>
-    <div className="text-2xl font-black text-[var(--text-primary)] mb-1">{value}</div>
-    <div className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-tight opacity-70">{label}</div>
+    <div className="text-3xl font-black text-white mb-1 relative z-10 tracking-tight">{value}</div>
+    <div className="text-[10px] font-black text-[#9090CC] uppercase tracking-widest relative z-10 opacity-60">{label}</div>
   </motion.div>
 );
 

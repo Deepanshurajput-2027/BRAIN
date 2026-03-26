@@ -31,90 +31,91 @@ const AddContentModal = ({ isOpen, onClose, onAdd }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            className="absolute inset-0 bg-[#030014]/60 backdrop-blur-sm"
+          />
+
+          {/* Modal */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="relative bg-[#1C1E35] w-full max-w-lg rounded-[2rem] shadow-2xl border border-white/10 overflow-hidden"
           >
-            {/* Modal */}
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-gray-100"
-            >
-              <div className="p-8">
-                <div className="flex justify-between items-center mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-indigo-50 rounded-xl text-indigo-600">
-                      <Plus size={24} />
-                    </div>
-                    <h2 className="text-2xl font-bold text-gray-900">Add to Brain</h2>
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-white/5 rounded-2xl text-white">
+                    <Plus size={24} />
                   </div>
-                  <button onClick={onClose} className="p-2 hover:bg-gray-50 rounded-xl text-gray-400">
-                    <X size={24} />
-                  </button>
+                  <h2 className="text-2xl font-black text-white tracking-tight">Add to Brain</h2>
+                </div>
+                <button
+                  onClick={onClose}
+                  className="p-2.5 hover:bg-white/5 rounded-2xl text-[#9090CC] hover:text-white transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-[#9090CC] uppercase tracking-widest ml-1">Paste URL</label>
+                  <div className="relative group">
+                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#555577] group-focus-within:text-indigo-400 transition-colors">
+                      <LinkIcon size={18} />
+                    </div>
+                    <input
+                      type="url"
+                      value={link}
+                      onChange={(e) => setLink(e.target.value)}
+                      placeholder="https://example.com/article"
+                      required
+                      className="w-full pl-16 pr-6 py-4 bg-[#252845] border border-white/10 rounded-2xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none font-medium text-white placeholder:text-[#555577]"
+                    />
+                  </div>
+                  <p className="mt-4 text-[11px] text-[#9090CC] opacity-60 flex items-center gap-2 ml-1 leading-relaxed">
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+                    Cortex will automatically generate tags and a summary.
+                  </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Paste URL
-                    </label>
-                    <div className="relative">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                        <LinkIcon size={18} />
-                      </div>
-                      <input
-                        type="url"
-                        value={link}
-                        onChange={(e) => setLink(e.target.value)}
-                        placeholder="https://example.com/article"
-                        required
-                        className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-gray-700"
-                      />
-                    </div>
-                    <p className="mt-2 text-xs text-gray-400 flex items-center gap-1.5 ml-1">
-                      Gemini will automatically generate tags and a summary.
-                    </p>
+                {error && (
+                  <div className="p-4 bg-red-400/10 rounded-2xl text-red-400 text-xs font-bold border border-red-400/20">
+                    {(typeof error === 'string' ? error : error?.message) || 'Failed to add content'}
                   </div>
+                )}
 
-                  {error && (
-                    <div className="p-4 bg-red-50 rounded-xl text-red-600 text-sm border border-red-100">
-                      {(typeof error === 'string' ? error : error?.message) || 'Failed to add content'}
-                    </div>
+                <button
+                  type="submit"
+                  disabled={status === 'loading' || status === 'success'}
+                  className={`w-full h-16 rounded-2xl font-black flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl
+                    ${status === 'success'
+                      ? 'bg-emerald-500 text-white shadow-emerald-500/20'
+                      : 'bg-[#6C63FF] hover:bg-[#5A52E8] text-white shadow-indigo-500/20'
+                    } ${status === 'loading' || status === 'success' ? 'opacity-80' : ''}`}
+                >
+                  {status === 'loading' ? (
+                    <Loader2 className="animate-spin" size={20} />
+                  ) : status === 'success' ? (
+                    <>
+                      <CheckCircle2 size={24} />
+                      Successfully Saved
+                    </>
+                  ) : (
+                    'Save to Knowledge Hub'
                   )}
-
-                  <button
-                    type="submit"
-                    disabled={status === 'loading' || status === 'success'}
-                    className={`w-full h-14 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all shadow-lg ${
-                      status === 'success'
-                        ? 'bg-emerald-500 text-white shadow-emerald-100'
-                        : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-100'
-                    }`}
-                  >
-                    {status === 'loading' ? (
-                      <Loader2 className="animate-spin" size={20} />
-                    ) : status === 'success' ? (
-                      <>
-                        <CheckCircle2 size={24} />
-                        Successfully Saved
-                      </>
-                    ) : (
-                      'Save to Knowledge Hub'
-                    )}
-                  </button>
-                </form>
-              </div>
-            </motion.div>
+                </button>
+              </form>
+            </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );

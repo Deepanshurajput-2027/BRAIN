@@ -1,23 +1,38 @@
 @import "tailwindcss";
 
 :root {
+  --color-bg-page:        #0D0F1A;
+  --color-bg-sidebar:     #13152A;
+  --color-bg-card:        #1A1D35;
+  --color-bg-input:       #252845;
+  --color-bg-hover:       rgba(255, 255, 255, 0.07);
+  --color-primary:        #6C63FF;
+  --color-primary-hover:  #5A52E8;
+  --color-primary-muted:  rgba(108, 99, 255, 0.15);
+  --color-text-primary:   #FFFFFF;
+  --color-text-secondary: #9090CC;
+  --color-text-muted:     #555577;
+  --color-border:         rgba(255, 255, 255, 0.08);
+  --color-border-hover:   rgba(255, 255, 255, 0.15);
+  --color-danger:         #E53E3E;
+  --color-warning:        #F6AD55;
+  --color-success:        #48BB78;
+
   --sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --bg-primary: #030014;
-  --bg-secondary: #0B0724;
-  --bg-tertiary: #16113A;
-  --accent: #6366f1;
-  --accent-glow: rgba(99, 102, 241, 0.15);
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --border-subtle: rgba(255, 255, 255, 0.05);
-  --border-active: rgba(99, 102, 241, 0.3);
+  --bg-primary: var(--color-bg-page);
+  --bg-secondary: var(--color-bg-sidebar);
+  --bg-tertiary: var(--color-bg-card);
+  --accent: var(--color-primary);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --border-subtle: var(--color-border);
 }
 
 body {
   margin: 0;
   font-family: var(--sans);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--color-bg-page);
+  color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
