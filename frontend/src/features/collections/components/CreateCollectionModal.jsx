@@ -59,7 +59,7 @@ const CreateCollectionModal = ({ isOpen, onClose }) => {
                 <input 
                   type="text"
                   placeholder="e.g. Research Papers"
-                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none font-medium"
+                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none font-medium text-black"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   autoFocus
@@ -70,7 +70,7 @@ const CreateCollectionModal = ({ isOpen, onClose }) => {
                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Description (Optional)</label>
                 <textarea 
                    placeholder="What's this collection about?"
-                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none font-medium resize-none h-32"
+                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none font-medium resize-none text-black h-32"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
